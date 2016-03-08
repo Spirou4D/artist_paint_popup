@@ -21,7 +21,7 @@
 
 # <pep8 compliant>
 
-bl_info = {"name": "Artist Paint Menu",
+bl_info = {"name": "Artist Paint Popup",
             "author": "CDMJ, Spirou4D",
             "version": (1, 0),
             "blender": (2, 76, 0),
@@ -33,61 +33,98 @@ bl_info = {"name": "Artist Paint Menu",
 
 import bpy
 
-class canvasMenu(bpy.types.Menu):
-    bl_label = "Artist Paint Menu"
-    bl_idname = "view3D.canvas_menu"
+class canvasPopup(bpy.types.Operator):
+    bl_idname = "artist_paint.popup"
+    bl_label = "Artist Paint Popup"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    @classmethod
+    def poll(cls, context):
+        brush = context.tool_settings.image_paint.brush
+        ob = context.active_object
+        return (brush is not None and ob is not None)
+
+    def __init__(self):
+        print("Start")
+
+    @classmethod
+    def close(self, context):
+        return {'FINISHED'}
+
+    def modal(self, context, event):
+        if event.type == 'LEFTMOUSE':  # Confirm
+            if event.value == 'PRESS':
+                #self.close(context)
+                return {'CANCELLED'}
+        elif event.type in ('RIGHTMOUSE', 'ESC'):  # Cancel
+            if event.value == 'PRESS':
+                return {'CANCELLED'}
+        return {'RUNNING_MODAL'}
+
+    def __del__(self):
+        print("End")
+
+
+    def invoke(self, context, event):
+        self.execute(context)
+        #print(context.window_manager.modal_handler_add(self))
+        return {'RUNNING_MODAL'}
+
+    def execute(self, context):
+        return context.window_manager.invoke_popup(self, width=160)
 
     def draw(self, context):
+        #canvasPopup.draw => "ARTIST_PAINT_OT_popup"
         layout = self.layout
-        toolsettings = context.tool_settings
+        tool_settings = context.tool_settings
         ipaint = context.tool_settings.image_paint
 
         layout.prop(ipaint, "use_stencil_layer",
-                        text="Use stencil mask")
+                                text="Use stencil mask")
 
-        col = layout.column(align = True)
-        if ipaint.use_stencil_layer==True:
-            #col.template_ID(ipaint, "stencil_image")
-            #col.operator("image.new", text="New").\
-                                #gen_context = 'PAINT_STENCIL'
-            col.prop(ipaint, "invert_stencil",
-                    text="Invert the mask")
+        if ipaint.use_stencil_layer == True:
+            layout.template_ID(ipaint, "stencil_image")
+            layout.operator("image.new", text="New").\
+                                gen_context = 'PAINT_STENCIL'
+            layout.prop(ipaint, "invert_stencil",
+                                text="Invert the mask")
 
-        layout.operator("artist_panel.canvas_horizontal",
+        layout.operator("artist_paint.canvas_horizontal",
                 text="Canvas Flip Horizontal",icon='ARROW_LEFTRIGHT')
-        layout.operator("artist_panel.canvas_vertical",
+        layout.operator("artist_paint.canvas_vertical",
                 text = "Canvas Flip Vertical", icon = 'FILE_PARENT')
-        layout.operator("artist_panel.rotate_ccw_15",
+        layout.operator("artist_paint.rotate_ccw_15",
                 text = "Rotate 15° CCW", icon = 'TRIA_LEFT')
-        layout.operator("artist_panel.rotate_cw_15",
+        layout.operator("artist_paint.rotate_cw_15",
                 text = "Rotate 15° CW", icon = 'TRIA_RIGHT')
-        layout.operator("artist_panel.rotate_ccw_90",
+        layout.operator("artist_paint.rotate_ccw_90",
                 text = "Rotate 90° CCW", icon = 'PREV_KEYFRAME')
-        layout.operator("artist_panel.rotate_cw_90",
+        layout.operator("artist_paint.rotate_cw_90",
                 text = "Rotate 90° CW", icon = 'NEXT_KEYFRAME')
-        layout.operator("artist_panel.canvas_resetrot",
+        layout.operator("artist_paint.canvas_resetrot",
                 text = "Reset Rotation", icon = 'CANCEL')
 
 
+
 def register():
-    bpy.utils.register_module(__name__)
+    bpy.utils.register_class(canvasPopup)
 
     km_list = ['Image Paint']
     for i in km_list:
         sm = bpy.context.window_manager
         km = sm.keyconfigs.default.keymaps[i]
-        kmi = km.keymap_items.new('wm.call_menu', 'C', 'PRESS')
-        kmi.properties.name = "view3D.canvas_menu"
+        kmi = km.keymap_items.new('artist_paint.popup', 'C', 'PRESS')
 
 def unregister():
-    bpy.utils.unregister_module(__name__)
+    bpy.utils.unregister_class(canvasPopup)
 
     km_list = ['Image Paint']
     for i in km_list:
         sm = bpy.context.window_manager
         km = sm.keyconfigs.default.keymaps[i]
-        for kmi in (kmi for kmi in km.keymap_items if (kmi.idname == "wm.call_menu" and kmi.properties.name == "view3D.canvas_menu")):
+        for kmi in (kmi for kmi in km.keymap_items if (kmi.idname == "artist_paint.popup")):
             km.keymap_items.remove(kmi)
+
 
 
 if __name__ == "__main__":
