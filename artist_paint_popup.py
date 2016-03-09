@@ -63,6 +63,20 @@ class canvasPopup(Operator):
         layout = self.layout
         col = layout.column()
         col.separator()
+        row = col.row(align=True)
+        row.label("Mirror")
+        row = col.row(align=True)
+        row.operator("object.curve_2dpoly",
+                    text = "Make 2D-Mask",
+                    icon = 'PARTICLE_POINT')
+        row.operator("object.curve_unwrap",
+                    text = "Close Bez.",
+                    icon = 'CURVE_NCIRCLE')
+
+        col.operator("artist_paint.trace_selection",
+                    text = "Mask from Gpencil",
+                    icon = 'CURVE_BEZCIRCLE')
+
         col.prop(ipaint, "use_stencil_layer",
                                 text="Use stencil mask")
 
@@ -72,13 +86,16 @@ class canvasPopup(Operator):
                                 gen_context = 'PAINT_STENCIL'
             col.prop(ipaint, "invert_stencil",
                                 text="Invert the mask")
+
+
+
         row = col.row(align=True)
         row.label("Mirror")
         row = col.row(align=True)
         row.operator("artist_paint.canvas_horizontal",
-                text="Canvas Flip Horizontal",icon='ARROW_LEFTRIGHT')
+                text="Flip Horizontal",icon='ARROW_LEFTRIGHT')
         row.operator("artist_paint.canvas_vertical",
-                text = "Canvas Flip Vertical", icon = 'FILE_PARENT')
+                text = "Flip Vertical", icon = 'FILE_PARENT')
         row = col.row(align=True)
         row.label("Rotation")
         row = col.row(align=True)
