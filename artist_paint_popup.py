@@ -35,6 +35,8 @@ import bpy
 from bpy.types import Menu, Panel, UIList, Operator
 from rna_prop_ui import PropertyPanel
 
+
+
 class canvasPopup(Operator):
     bl_idname = "artist_paint.popup"
     bl_label = "Artist Paint Popup"
@@ -50,13 +52,14 @@ class canvasPopup(Operator):
         return True
 
     def invoke(self, context, event):
-        return context.window_manager.invoke_props_dialog(self, width=160)
+        return context.window_manager.invoke_props_dialog(self, width=240)
 
     def execute(self, context):
         return {'FINISHED'}
 
     def draw(self, context):
         #"ARTIST_PAINT_OT_popup"
+        _strAngle = str(context.scene.CustomAngle)
         tool_settings = context.tool_settings
         ipaint = context.tool_settings.image_paint
 
@@ -64,13 +67,13 @@ class canvasPopup(Operator):
         col = layout.column()
         col.separator()
         row = col.row(align=True)
-        row.label("Mirror")
+        row.label("Objects Masking Tools")
         row = col.row(align=True)
         row.operator("object.curve_2dpoly",
                     text = "Make 2D-Mask",
                     icon = 'PARTICLE_POINT')
         row.operator("object.curve_unwrap",
-                    text = "Close Bez.",
+                    text = "Close B. Mask & Unwrap",
                     icon = 'CURVE_NCIRCLE')
 
         col.operator("artist_paint.trace_selection",
@@ -87,22 +90,23 @@ class canvasPopup(Operator):
             col.prop(ipaint, "invert_stencil",
                                 text="Invert the mask")
 
-
-
-        row = col.row(align=True)
-        row.label("Mirror")
+        col.label("Mirrors / Rotations")
+        box = layout.box()
+        col = box.column(align = True)
         row = col.row(align=True)
         row.operator("artist_paint.canvas_horizontal",
                 text="Flip Horizontal",icon='ARROW_LEFTRIGHT')
         row.operator("artist_paint.canvas_vertical",
                 text = "Flip Vertical", icon = 'FILE_PARENT')
         row = col.row(align=True)
-        row.label("Rotation")
+        row.label() #empty line
         row = col.row(align=True)
+        buttName_1 = "Rotate " +_strAngle+"° CCW"
+        buttName_2 = "-"+buttName_1
         row.operator("artist_paint.rotate_ccw_15",
-                text = "Rotate 15° CCW", icon = 'TRIA_LEFT')
+                text = buttName_1, icon = 'TRIA_LEFT')
         row.operator("artist_paint.rotate_cw_15",
-                text = "Rotate 15° CW", icon = 'TRIA_RIGHT')
+                text = buttName_2, icon = 'TRIA_RIGHT')
         row = col.row(align=True)
         row.operator("artist_paint.rotate_ccw_90",
                 text = "Rotate 90° CCW", icon = 'PREV_KEYFRAME')
