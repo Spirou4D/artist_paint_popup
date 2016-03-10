@@ -52,7 +52,8 @@ class canvasPopup(Operator):
         return True
 
     def invoke(self, context, event):
-        return context.window_manager.invoke_props_dialog(self, width=240)
+        return context.window_manager.invoke_props_dialog(self,
+                                                        width=240)
 
     def execute(self, context):
         return {'FINISHED'}
@@ -66,19 +67,17 @@ class canvasPopup(Operator):
         layout = self.layout
         col = layout.column()
         col.separator()
-        row = col.row(align=True)
-        row.label("Objects Masking Tools")
-        row = col.row(align=True)
-        row.operator("object.curve_2dpoly",
-                    text = "Make 2D-Mask",
-                    icon = 'PARTICLE_POINT')
-        row.operator("object.curve_unwrap",
-                    text = "Close B. Mask & Unwrap",
-                    icon = 'CURVE_NCIRCLE')
-
+        col.label("Objects Masking Tools")
         col.operator("artist_paint.trace_selection",
                     text = "Mask from Gpencil",
                     icon = 'CURVE_BEZCIRCLE')
+        row = col.row(align=True)
+        row.operator("artist_paint.curve_2dpoly",
+                    text = "Make 2D-Mask",
+                    icon = 'PARTICLE_POINT')
+        row.operator("artist_paint.curve_unwrap",
+                    text = "Close B. Mask & Unwrap",
+                    icon = 'CURVE_NCIRCLE')
 
         col.prop(ipaint, "use_stencil_layer",
                                 text="Use stencil mask")
@@ -134,7 +133,8 @@ def unregister():
     for i in km_list:
         sm = bpy.context.window_manager
         km = sm.keyconfigs.default.keymaps[i]
-        for kmi in (kmi for kmi in km.keymap_items if (kmi.idname == "artist_paint.popup")):
+        for kmi in (kmi for kmi in km.keymap_items \
+                            if (kmi.idname == "artist_paint.popup")):
             km.keymap_items.remove(kmi)
 
 
