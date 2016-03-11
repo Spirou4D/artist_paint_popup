@@ -65,9 +65,11 @@ class canvasPopup(Operator):
         ipaint = context.tool_settings.image_paint
 
         layout = self.layout
-        col = layout.column()
-        col.separator()
-        col.label("Objects Masking Tools")
+        trunk = layout.column()
+        trunk.separator()
+        trunk.label("Objects Masking Tools")
+        box = trunk.box()
+        col = box.column()
         col.operator("artist_paint.trace_selection",
                     text = "Mask from Gpencil",
                     icon = 'CURVE_BEZCIRCLE')
@@ -88,17 +90,19 @@ class canvasPopup(Operator):
                                 gen_context = 'PAINT_STENCIL'
             col.prop(ipaint, "invert_stencil",
                                 text="Invert the mask")
-
-        col.label("Mirrors / Rotations")
-        box = layout.box()
+        trunk.separator()                             #empty line
+        trunk.label("Mirrors / Rotations")
+        box = trunk.box()
         col = box.column(align = True)
+        col.prop(context.scene, "ArtistPaint_Bool01" ,
+                                    text="Canvas Frame Contraint")
         row = col.row(align=True)
         row.operator("artist_paint.canvas_horizontal",
                 text="Flip Horizontal",icon='ARROW_LEFTRIGHT')
         row.operator("artist_paint.canvas_vertical",
                 text = "Flip Vertical", icon = 'FILE_PARENT')
         row = col.row(align=True)
-        row.label() #empty line
+        col.separator()                             #empty line
         row = col.row(align=True)
         buttName_1 = "Rotate " +_strAngle+"° CCW"
         buttName_2 = "-"+buttName_1
@@ -111,7 +115,6 @@ class canvasPopup(Operator):
                 text = "Rotate 90° CCW", icon = 'PREV_KEYFRAME')
         row.operator("artist_paint.rotate_cw_90",
                 text = "Rotate 90° CW", icon = 'NEXT_KEYFRAME')
-        col.separator()
         col.operator("artist_paint.canvas_resetrot",
                 text = "Reset Rotation", icon = 'CANCEL')
 
