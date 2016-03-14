@@ -87,10 +87,6 @@ class canvasPopup(Operator):
                     text = "",
                     icon = 'OUTLINER_OB_MESH')
 
-        col.operator("artist_paint.inverted_mask",
-                    text = "Mesh Mask Inversion",
-                    icon = 'MOD_TRIANGULATE')
-
         col.prop(ipaint, "use_stencil_layer",
                                 text="Use stencil mask")
 
@@ -131,7 +127,7 @@ class canvasPopup(Operator):
 
 
 def register():
-    bpy.utils.register_class(canvasPopup)
+    bpy.utils.register_module(__name__)
 
     km_list = ['Image Paint']
     for i in km_list:
@@ -140,7 +136,7 @@ def register():
         kmi = km.keymap_items.new('artist_paint.popup', 'C', 'PRESS')
 
 def unregister():
-    bpy.utils.unregister_class(canvasPopup)
+    bpy.utils.unregister_module(__name__)
 
     km_list = ['Image Paint']
     for i in km_list:
