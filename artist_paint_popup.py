@@ -86,6 +86,9 @@ class canvasPopup(Operator):
         row.operator("artist_paint.curve_unwrap",
                     text = "",
                     icon = 'OUTLINER_OB_MESH')
+        col.operator("artist_paint.inverted_mask",
+                    text = "Mesh Mask Inversion",
+                    icon = 'MOD_TRIANGULATE')
 
         col.prop(ipaint, "use_stencil_layer",
                                 text="Use stencil mask")
@@ -101,7 +104,7 @@ class canvasPopup(Operator):
         box = trunk.box()
         col = box.column(align = True)
         col.prop(context.scene, "ArtistPaint_Bool01" ,
-                                    text="Canvas Frame Contraint")
+                                    text="Canvas Frame Constraint")
         row = col.row(align=True)
         row.operator("artist_paint.canvas_horizontal",
                 text="Flip Horizontal",icon='ARROW_LEFTRIGHT')
@@ -131,9 +134,10 @@ def register():
 
     km_list = ['Image Paint']
     for i in km_list:
+        #bpy.context.window_manager.keyconfigs.default.keymaps
         sm = bpy.context.window_manager
         km = sm.keyconfigs.default.keymaps[i]
-        kmi = km.keymap_items.new('artist_paint.popup', 'C', 'PRESS')
+        kmi = km.keymap_items.new('artist_paint.popup', 'V', 'PRESS')
 
 def unregister():
     bpy.utils.unregister_module(__name__)
