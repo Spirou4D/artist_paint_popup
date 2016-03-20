@@ -41,6 +41,15 @@ import math
 import os
 SEP = os.sep
 
+#-------------------------------------------get the addon preferences
+def get_addon_preferences():
+    #bpy.context.user_preferences.addons["notify_after_render"].preferences['sent_sms']=1
+    #Par exemple:
+    # addon_prefs = get_addon_preferences()
+    # addon_prefs.url_smsservice
+    user_preferences = bpy.context.user_preferences
+    addon_preferences = user_preferences.addons['artist_paint_panel'].preferences
+    return addon_preferences
 
 class canvasPopup(Operator):
     bl_idname = "artist_paint.popup"
@@ -65,11 +74,13 @@ class canvasPopup(Operator):
 
     def draw(self, context):
         #"ARTIST_PAINT_OT_popup"
-        _strAngle = str(context.scene.CustomAngle)
+        addon_prefs = get_addon_preferences()
+        CustomAngle  = str(addon_prefs.CustomAngle)
         tool_settings = context.tool_settings
         ipaint = context.tool_settings.image_paint
 
         layout = self.layout
+        layout.active = context.scene.UI_is_activated
         trunk = layout.column()
         trunk.separator()
         trunk.label("Objects Masking Tools")
@@ -113,7 +124,7 @@ class canvasPopup(Operator):
         row = col.row(align=True)
         col.separator()                             #empty line
         row = col.row(align=True)
-        buttName_1 = "Rotate " +_strAngle+"° CCW"
+        buttName_1 = "Rotate " + CustomAngle +"° CCW"
         buttName_2 = "-"+buttName_1
         row.operator("artist_paint.rotate_ccw_15",
                 text = buttName_1, icon = 'TRIA_LEFT')
@@ -134,7 +145,6 @@ def register():
 
     km_list = ['Image Paint']
     for i in km_list:
-        #bpy.context.window_manager.keyconfigs.default.keymaps
         sm = bpy.context.window_manager
         km = sm.keyconfigs.default.keymaps[i]
         kmi = km.keymap_items.new('artist_paint.popup', 'V', 'PRESS')
@@ -149,7 +159,6 @@ def unregister():
         for kmi in (kmi for kmi in km.keymap_items \
                             if (kmi.idname == "artist_paint.popup")):
             km.keymap_items.remove(kmi)
-
 
 
 if __name__ == "__main__":
