@@ -24,7 +24,7 @@
 bl_info = {"name": "Artist Paint Popup",
             "author": "CDMJ, Spirou4D",
             "version": (1, 0),
-            "blender": (2, 76, 0),
+            "blender": (2, 77, 0),
             "location": "",
             "description": "shortcut menu for Artist Panel addon",
             "warning": "",
@@ -75,7 +75,7 @@ class canvasPopup(Operator):
     def draw(self, context):
         #"ARTIST_PAINT_OT_popup"
         addon_prefs = get_addon_preferences()
-        CustomAngle  = str(addon_prefs.CustomAngle)
+        CustomAngle  = str(addon_prefs.customAngle)
         tool_settings = context.tool_settings
         ipaint = context.tool_settings.image_paint
 
@@ -108,13 +108,18 @@ class canvasPopup(Operator):
             col.template_ID(ipaint, "stencil_image")
             col.operator("image.new", text="New").\
                                 gen_context = 'PAINT_STENCIL'
-            col.prop(ipaint, "invert_stencil",
-                                text="Invert the mask")
+            row = col.row(align = True)
+            row.prop(ipaint, "stencil_color", text="")
+            row.prop(ipaint, "invert_stencil",
+                        text="Invert the mask",
+                        icon='IMAGE_ALPHA')
+            #col.prop(ipaint, "invert_stencil", text="Invert the mask")
+
         trunk.separator()                             #empty line
         trunk.label("Mirrors / Rotations")
         box = trunk.box()
         col = box.column(align = True)
-        col.prop(context.scene, "ArtistPaint_Bool01" ,
+        col.prop(context.scene, "canvas_in_frame" ,
                                     text="Canvas Frame Constraint")
         row = col.row(align=True)
         row.operator("artist_paint.canvas_horizontal",
