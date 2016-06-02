@@ -153,8 +153,12 @@ class canvasPopup(Operator):
         box = layout.box()
         col = box.column(align = True)          #CANVAS FRAME CONSTRAINT
         row = col.row(align = True)
-        row.label(text="Mirror")                      #MIRROR FLIP
-        row.enabled = pollAPT(self, context)
+        row.label(text="Mirror Origin")
+        row.operator("artist_paint.set_symmetry_origin",
+                    text="Set Symetry Origin", icon='VIEW3D_VEC')
+        row.operator("artist_paint.reset_origin",
+                    text="", icon='RECOVER_AUTO')
+        col.separator()
 
         row = col.row(align = True)
         row.operator("artist_paint.canvas_horizontal",
