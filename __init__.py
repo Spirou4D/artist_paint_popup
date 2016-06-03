@@ -75,9 +75,8 @@ class canvasPopup(Operator):
 
     @classmethod
     def poll(cls, context):
-        brush = context.tool_settings.image_paint.brush
         ob = context.active_object
-        return (brush is not None and ob is not None)
+        return ob is not None
 
     def check(self, context):
         return True
@@ -195,16 +194,16 @@ class canvasPopup(Operator):
 def register():
     bpy.utils.register_module(__name__)
 
-    km_list = ['Image Paint']
+    km_list = ['3D View']
     for i in km_list:
         sm = bpy.context.window_manager
         km = sm.keyconfigs.default.keymaps[i]
-        kmi = km.keymap_items.new('artist_paint.popup', 'V', 'PRESS')
+        kmi = km.keymap_items.new('artist_paint.popup', 'W', 'PRESS', alt=True)
 
 def unregister():
     bpy.utils.unregister_module(__name__)
 
-    km_list = ['Image Paint']
+    km_list = ['3D View']
     for i in km_list:
         sm = bpy.context.window_manager
         km = sm.keyconfigs.default.keymaps[i]
