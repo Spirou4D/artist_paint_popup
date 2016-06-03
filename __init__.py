@@ -121,16 +121,16 @@ class canvasPopup(Operator):
 
         col.separator()                             #empty line
 
-        row = col.row(align=True)
-        row.operator("artist_paint.curve_2dpoly",
-                    text = "Make Vector Mask",
+        col.operator("artist_paint.curve_2dpoly",
+                    text = "Make Vector Contour",
                     icon = 'PARTICLE_POINT')
-        row.operator("artist_paint.curve_unwrap",
-                    text = "",
-                    icon = 'OUTLINER_OB_MESH')
 
-        col.operator("artist_paint.inverted_mask",
-                    text = "Mesh Mask Inversion",
+        row = col.row(align = True)
+        row.operator("artist_paint.curve_unwrap",
+                    text = "To Mesh Mask",
+                    icon = 'OUTLINER_OB_MESH')
+        row.operator("artist_paint.inverted_mask",
+                    text = "To Inverted Mesh Mask",
                     icon = 'MOD_TRIANGULATE')
 
         col.separator()                             #empty line
