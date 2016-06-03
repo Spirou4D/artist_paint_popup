@@ -78,7 +78,7 @@ class canvasPopup(Operator):
         obj = context.active_object
         A = obj is not None
         B = context.mode == 'PAINT_TEXTURE'
-        C = context.mode == 'EDIT'
+        C = context.mode == 'EDIT_CURVE'
         return A and (B or C)
 
     def check(self, context):
