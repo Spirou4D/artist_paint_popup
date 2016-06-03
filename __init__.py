@@ -75,8 +75,11 @@ class canvasPopup(Operator):
 
     @classmethod
     def poll(cls, context):
-        ob = context.active_object
-        return ob is not None
+        obj = context.active_object
+        A = obj is not None
+        B = context.mode == 'PAINT_TEXTURE'
+        C = context.mode == 'EDIT'
+        return A and (B or C)
 
     def check(self, context):
         return True
