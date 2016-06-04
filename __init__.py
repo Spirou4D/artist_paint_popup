@@ -41,15 +41,19 @@ import math
 import os
 SEP = os.sep
 
-#-------------------------------------------get the addon preferences
-def get_addon_preferences():
-    #bpy.context.user_preferences.addons["notify_after_render"].preferences['sent_sms']=1
-    #Par exemple:
-    # addon_prefs = get_addon_preferences()
-    # addon_prefs.url_smsservice
-    user_preferences = bpy.context.user_preferences
-    addon_preferences = user_preferences.addons['artist_paint_panel'].preferences
-    return addon_preferences
+#-------------------------------------------New: get the addon preferences
+def get_addon_prefs_corr():
+    Addons = bpy.context.user_preferences.addons
+    for i in Addons:
+        if Addons.find('artist_paint_panel') != -1:
+            key = Addons.find('artist_paint_panel')
+            break
+        elif Addons.find('artist_paint_panel-master') != -1:
+            key = Addons.find('artist_paint_panel')
+            break
+        else:
+            return -1
+    return Addons[key].preferences
 
 def pollAPT(self, context):
     scene = context.scene
@@ -93,7 +97,9 @@ class canvasPopup(Operator):
 
     def draw(self, context):
         #"ARTIST_PAINT_OT_popup"
-        addon_prefs = get_addon_preferences()
+        addon_prefs = get_addon_prefs_corr()
+        if addon_prefs == -1:
+            return {'FINISHED'}
         buttName_1 = str(addon_prefs.customAngle) +"°"
         buttName_2 = str(addon_prefs.customAngle) +"°"
 
