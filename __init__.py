@@ -99,13 +99,15 @@ class canvasPopup(Operator):
         #"ARTIST_PAINT_OT_popup"
         addon_prefs = get_addon_prefs_corr()
         if addon_prefs == -1:
+            print("You must install the 'Artist Paint Panel' Add-On, please")
             return {'FINISHED'}
-        buttName_1 = str(addon_prefs.customAngle) +"°"
-        buttName_2 = str(addon_prefs.customAngle) +"°"
 
         CustomAngle  = str(addon_prefs.customAngle)
         tool_settings = context.tool_settings
         ipaint = context.tool_settings.image_paint
+
+        buttName_1 = CustomAngle +"°"
+        buttName_2 = CustomAngle +"°"
 
         layout = self.layout
         layout.active = context.scene.UI_is_activated
