@@ -163,18 +163,17 @@ class canvasPopup(Operator):
         col = box.column(align = True)
         row = col.row(align = True)
         row1 = row.split(align=True)
-        row1.label(text="Mirror Origin")
-        row1.scale_x = 0.50
+        row1.label(text="Mirror")
+        row1.scale_x = 0.60
         row.separator()
         row2 = row.split(align=True)
         row2.prop(ipaint, "use_symmetry_x", text="Hor.", toggle=True)
         row2.prop(ipaint, "use_symmetry_y", text="Ver.", toggle=True)
-        row2.scale_x = 0.18
+        row2.scale_x = 0.70
         row.separator()
         row3 = row.split(align=True)
         row3.operator("artist_paint.set_symmetry_origin",
-                    text="Set Origin", icon='VIEW3D_VEC')
-        row3.scale_x = 0.60
+                    text="New", icon='VIEW3D_VEC')
         row4 = row.split(align=True)
         row4.operator("artist_paint.reset_origin",
                     text="", icon='RECOVER_AUTO')
