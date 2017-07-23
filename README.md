@@ -1,2 +1,2 @@
-# artist_paint_popup
-Popup menu for the "artist_paint_panel add-on
+# EZDRAW PIE
+Popup panel and Pie for EZDraw Artist Paint Tools.
